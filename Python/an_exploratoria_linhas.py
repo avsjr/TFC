@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 IR = 'Indicador de Rendimento (P)'
 SAEB = 'SAEB (N)'
@@ -13,17 +12,24 @@ data = {
 
 df = pd.DataFrame(data)
 
-print(df)
-
 plt.figure(figsize=(12, 6))
 
 plt.plot(df['Ano'], df[IR], marker='o', label=IR)
 plt.plot(df['Ano'], df[SAEB], marker='o', label=SAEB)
 plt.plot(df['Ano'], df['IDEB'], marker='o', label='IDEB')
 
+# Adicionando os valores dos pontos das linhas acima ou abaixo das respectivas linhas
+offset = 0.1
+for col in [IR, SAEB, 'IDEB']:
+    for x, y in zip(df['Ano'], df[col]):
+        if col == 'IDEB':
+            plt.text(x, y - offset, f'{y:.1f}', ha='right', va='top', color='red')
+        else:
+            plt.text(x, y + offset, f'{y:.2f}', ha='right', va='bottom', color='orange')
+
 plt.xlabel('Ano')
 plt.ylabel('Valores')
-plt.title('Evolução das Variáveis ao Longo dos Anos')
+plt.title('Evolução do Indicador de Rendimento, SAEB e IDEB ao Longo dos Anos')
 plt.legend()
 plt.grid(True)
 
